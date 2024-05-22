@@ -25,7 +25,7 @@ public class CorrentistaController {
     }
 
     @GetMapping
-    List<Correntista> list(Correntista correntista)
+    List<Correntista> list()
     {
         return correntistaService.list();
     }

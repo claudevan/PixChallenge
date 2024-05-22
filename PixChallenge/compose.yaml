@@ -2,9 +2,9 @@ services:
   mysql:
     image: 'mysql:latest'
     environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+      - 'MYSQL_DATABASE=pixdb'
+      - 'MYSQL_PASSWORD=123456'
+      - 'MYSQL_ROOT_PASSWORD=pa$$w0rd'
+      - 'MYSQL_USER=user'
     ports:
-      - '3306'
+      - '3306:3306'

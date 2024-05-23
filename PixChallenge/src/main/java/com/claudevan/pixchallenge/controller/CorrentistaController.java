@@ -1,7 +1,10 @@
 package com.claudevan.pixchallenge.controller;
 
-import com.claudevan.pixchallenge.entity.Correntista;
+import com.claudevan.pixchallenge.model.dto.correntista.CorrentistaCreateRequest;
+import com.claudevan.pixchallenge.model.entity.Correntista;
 import com.claudevan.pixchallenge.service.CorrentistaService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,33 +15,33 @@ import java.util.UUID;
 public class CorrentistaController {
 
 
-    private final CorrentistaService correntistaService;
+    private final CorrentistaService service;
 
-    public CorrentistaController(CorrentistaService correntistaService) {
-        this.correntistaService = correntistaService;
+    public CorrentistaController(CorrentistaService service) {
+        this.service = service;
     }
 
     @PostMapping
-    List<Correntista> create(@RequestBody Correntista correntista)
+    ResponseEntity<List<Correntista>> create(@RequestBody CorrentistaCreateRequest correntista)
     {
-        return correntistaService.create(correntista);
+        return new ResponseEntity<>(service.create(correntista), HttpStatus.CREATED);
     }
 
     @GetMapping
-    List<Correntista> list()
+    ResponseEntity<List<Correntista>> list()
     {
-        return correntistaService.list();
+        return new ResponseEntity<>(service.list(), HttpStatus.OK);
     }
 
     @PutMapping
-    List<Correntista> update(@RequestBody Correntista correntista)
+    ResponseEntity<List<Correntista>> update(@RequestBody Correntista correntista)
     {
-        return correntistaService.update(correntista);
+        return new ResponseEntity<>(service.update(correntista), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    List<Correntista> delete(@PathVariable UUID id)
+    ResponseEntity<List<Correntista>> delete(@PathVariable UUID id)
     {
-        return correntistaService.delete(id);
+        return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
     }
 }

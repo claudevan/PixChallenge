@@ -1,6 +1,7 @@
 package com.claudevan.pixchallenge.service;
 
-import com.claudevan.pixchallenge.entity.Correntista;
+import com.claudevan.pixchallenge.model.dto.correntista.CorrentistaCreateRequest;
+import com.claudevan.pixchallenge.model.entity.Correntista;
 import com.claudevan.pixchallenge.repository.CorrentistaRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ public class CorrentistaService {
         this.correntistaRepository = correntistaRepository;
     }
 
-    public List<Correntista> create(Correntista correntista){
-        correntistaRepository.save(correntista);
+    public List<Correntista> create(CorrentistaCreateRequest correntista){
+        correntistaRepository.save(new Correntista(correntista));
 
         return list();
     }

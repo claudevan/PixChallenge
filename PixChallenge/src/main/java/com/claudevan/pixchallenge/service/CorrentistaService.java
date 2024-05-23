@@ -2,7 +2,7 @@ package com.claudevan.pixchallenge.service;
 
 import com.claudevan.pixchallenge.model.dto.correntista.CorrentistaCreateRequest;
 import com.claudevan.pixchallenge.model.entity.Correntista;
-import com.claudevan.pixchallenge.repository.CorrentistaRepository;
+import com.claudevan.pixchallenge.repositories.CorrentistaRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 

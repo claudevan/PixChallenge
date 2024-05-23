@@ -16,7 +16,9 @@ public class Conta {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String conta;
+    @Column(nullable = false)
+    private Integer conta;
+    @Column(nullable = false)
     private String agencia;
 
     @OneToOne

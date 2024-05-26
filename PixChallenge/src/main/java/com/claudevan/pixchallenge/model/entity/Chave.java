@@ -1,5 +1,6 @@
 package com.claudevan.pixchallenge.model.entity;
 
+import com.claudevan.pixchallenge.model.dto.chave.ChaveCreateRequest;
 import com.claudevan.pixchallenge.model.enums.TipoChave;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,6 +10,7 @@ import lombok.*;
 @Table(name = "chaves")
 @AllArgsConstructor
 @NoArgsConstructor
+@IdClass(ChaveComposta.class)
 public class Chave {
     @Id @JoinColumn(name = "conta_id")
     @OneToOne(fetch = FetchType.LAZY)
@@ -19,4 +21,11 @@ public class Chave {
 
     @Column(length = 36, unique = true)
     private String valor;
+
+    public Chave(ChaveCreateRequest request, Conta contaNew) {
+        conta = contaNew;
+        tipoChave = request.tipoChave();
+        valor = request.valorChave();
+    }
 }
+

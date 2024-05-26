@@ -2,6 +2,7 @@ package com.claudevan.pixchallenge.controller;
 
 import com.claudevan.pixchallenge.model.dto.chave.ChaveCreateRequest;
 import com.claudevan.pixchallenge.service.ChaveService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,8 @@ public class ChaveController {
     }
 
     @PostMapping
-    ResponseEntity<String> create(@RequestBody ChaveCreateRequest request){
+    ResponseEntity<String> create(@Valid @RequestBody ChaveCreateRequest request){
+
         return ResponseEntity.ok(chaveService.create(request));
     }
 

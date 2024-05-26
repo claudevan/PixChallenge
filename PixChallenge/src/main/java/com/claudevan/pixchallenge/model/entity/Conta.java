@@ -1,8 +1,10 @@
 package com.claudevan.pixchallenge.model.entity;
 
+import com.claudevan.pixchallenge.model.dto.chave.ChaveCreateRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,15 +18,24 @@ public class Conta {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     @Column(nullable = false)
     private Integer conta;
-    @Column(nullable = false)
-    private String agencia;
 
-    @OneToOne
+    @Column(nullable = false)
+    private Integer agencia;
+
+    @ManyToOne
     @JoinColumn(name = "correntista_id")
     private Correntista correntista;
 
     @OneToMany
-    private List<Chave> chaves;
+    private List<Chave> chaves = new ArrayList<>();
+
+    public Conta(ChaveCreateRequest request, Correntista correntista) {
+        conta = request.conta();
+        agencia = request.agencia();
+        this.correntista = correntista;
+        chaves.add(new Chave(request, this));
+    }
 }

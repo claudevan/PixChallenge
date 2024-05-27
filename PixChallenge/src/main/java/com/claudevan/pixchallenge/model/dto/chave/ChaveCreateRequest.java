@@ -28,7 +28,10 @@ public record ChaveCreateRequest (
         String sobrenome,
 
         @NotNull(message = "Campo Obrigatorio")
-        TipoPessoa tipoPessoa
+        TipoPessoa tipoPessoa,
+
+        @NotBlank(message = "Campo Obrigatorio")
+        String documento
 ){
 
 }

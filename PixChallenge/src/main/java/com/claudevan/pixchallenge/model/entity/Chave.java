@@ -10,17 +10,23 @@ import lombok.*;
 @Table(name = "chaves")
 @AllArgsConstructor
 @NoArgsConstructor
-@IdClass(ChaveComposta.class)
+@IdClass(ChaveId.class)
 public class Chave {
-    @Id @JoinColumn(name = "conta_id")
-    @OneToOne(fetch = FetchType.LAZY)
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "conta_id")
     private Conta conta;
 
-    @Id @JoinColumn(name = "tipo_chave_id")
+    @Id
+    @Column(name = "tipo_chave")
+    @Enumerated(EnumType.STRING)
     private TipoChave tipoChave;
 
     @Column(length = 36, unique = true)
     private String valor;
+
+    @Column(nullable = false)
+    private boolean ativa = true;
 
     public Chave(ChaveCreateRequest request, Conta contaNew) {
         conta = contaNew;

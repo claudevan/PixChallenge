@@ -25,17 +25,18 @@ public class Conta {
     @Column(nullable = false)
     private Integer agencia;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "correntista_id")
     private Correntista correntista;
 
-    @OneToMany
-    private List<Chave> chaves = new ArrayList<>();
+    @OneToMany(mappedBy = "conta", fetch = FetchType.LAZY)
+    //@JoinColumn(name = "conta", nullable = false)
+    private List<Chave> chaves;
 
     public Conta(ChaveCreateRequest request, Correntista correntista) {
         conta = request.conta();
         agencia = request.agencia();
         this.correntista = correntista;
-        chaves.add(new Chave(request, this));
+        //chaves.add(new Chave(request, this));
     }
 }

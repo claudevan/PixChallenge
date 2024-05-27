@@ -18,8 +18,7 @@ public class ChaveController {
     }
 
     @PostMapping
-    ResponseEntity<String> create(@Valid @RequestBody ChaveCreateRequest request){
-
+    ResponseEntity<String> create(@Valid @RequestBody ChaveCreateRequest request) {
         return ResponseEntity.ok(chaveService.create(request));
     }
 

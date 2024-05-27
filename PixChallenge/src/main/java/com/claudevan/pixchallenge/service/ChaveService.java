@@ -1,5 +1,6 @@
 package com.claudevan.pixchallenge.service;
 
+import com.claudevan.pixchallenge.exceptions.ChaveJaCadastradaException;
 import com.claudevan.pixchallenge.model.dto.chave.ChaveCreateRequest;
 import com.claudevan.pixchallenge.model.entity.Chave;
 import com.claudevan.pixchallenge.model.entity.Conta;
@@ -8,9 +9,9 @@ import com.claudevan.pixchallenge.repositories.ChaveRepository;
 import com.claudevan.pixchallenge.repositories.ContaRepository;
 import com.claudevan.pixchallenge.repositories.CorrentistaRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 public class ChaveService {
@@ -26,27 +27,40 @@ public class ChaveService {
         this.contaRepository = contaRepository;
     }
 
-    public String create(ChaveCreateRequest request){
-        var conta = contaRepository.findContaByAgenciaAndConta(request.agencia(), request.conta());
+    @Transactional
+    public String create(ChaveCreateRequest request) {
+        Correntista correntistaSalvo = null;
+        Conta contaSalva = null;
+        Chave chaveSalva = null;
 
-        if(conta.isEmpty()){
-            var correntista = new Correntista(request);
-            correntistaRepository.save(correntista);
-
-
-            //var contaNew = new Conta(request, correntista);
-
-
-            //var chave = new Chave(request, contaNew);
-            //chaveRepository.save(chave);
-
-            //contaRepository.save(contaNew);
+        var correntista = correntistaRepository.findCorrentistaByDocumento(request.documento());
+        if(correntista.isEmpty()) {
+            correntistaSalvo = correntistaRepository.save(new Correntista(request));
         }
 
-        //Senão encontrar o correntista deve cadastrar
+        var conta = contaRepository.findContaByAgenciaAndConta(request.agencia(), request.conta());
+        if(conta.isEmpty()){
+            contaSalva = contaRepository.save(new Conta(request, correntistaSalvo));
+        }
+
+        var chave = chaveRepository.findChaveByValorAndTipoChave(request.valorChave(), request.tipoChave());
+
+        if(chave.isPresent()){
+            throw new ChaveJaCadastradaException(request);
+        }
+
+        var chavesCadastradas = chaveRepository.findChaveByConta(contaSalva);
+
+        if(chavesCadastradas.stream().count() > 5){
+            throw new ChaveJaCadastradaException(request);
+        }
+
+        chaveSalva = chaveRepository.save(new Chave(request, contaSalva));
+
+
 
         //Pesquisar chave e quantidades cadastradas
 
-        return "";
+        return correntistaSalvo.getId().toString();
     }
 }

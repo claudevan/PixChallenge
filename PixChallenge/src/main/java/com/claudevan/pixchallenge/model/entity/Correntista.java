@@ -8,7 +8,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,26 +27,26 @@ public class Correntista {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotBlank
     private TipoConta tipoConta;
 
-    @NotBlank
     private String nome;
     private String sobrenome;
 
-    @NotBlank
     private TipoPessoa tipoPessoa;
 
+    @Column(unique = true, nullable = false, length = 14)
+    private String documento;
+
     @Column(name = "dataInclusao", insertable = true, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dataInclusao;
+    @CreationTimestamp
+    private Instant dataInclusao = Instant.now();
 
     @Column(name = "dataAlteracao", insertable = false, updatable = true)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dataAlteracao;
+    @UpdateTimestamp
+    private Instant dataAlteracao = Instant.now();
 
-    @OneToMany(mappedBy = "correntista")
-    private List<Conta> contas = new ArrayList<>();
+    @OneToMany(mappedBy = "correntista", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Conta> contas;
 
     public Correntista(CorrentistaCreateRequest request) {
         this.nome = request.nome();
@@ -57,7 +60,8 @@ public class Correntista {
         this.tipoConta = request.tipoConta();
         this.sobrenome = request.sobrenome();
         this.tipoPessoa = request.tipoPessoa();
+        this.documento = request.documento();
 
-        this.contas.add(new Conta(request, this));
+        //this.contas.add(new Conta(request, this));
     }
 }

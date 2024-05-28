@@ -4,6 +4,10 @@ import com.claudevan.pixchallenge.model.dto.chave.ChaveCreateRequest;
 import com.claudevan.pixchallenge.model.enums.TipoChave;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.Instant;
 
 @Data
 @Entity
@@ -28,10 +32,18 @@ public class Chave {
     @Column(nullable = false)
     private boolean ativa = true;
 
-    public Chave(ChaveCreateRequest request, Conta contaNew) {
-        conta = contaNew;
-        tipoChave = request.tipoChave();
-        valor = request.valorChave();
+    @Column(name = "dataInclusao", insertable = true, updatable = false)
+    @CreationTimestamp
+    private Instant dataInclusao = Instant.now();
+
+    @Column(name = "dataAlteracao", insertable = false, updatable = true)
+    @UpdateTimestamp
+    private Instant dataAlteracao = Instant.now();
+
+    public Chave(ChaveCreateRequest request) {
+        //this.conta = conta;
+        this.tipoChave = request.tipoChave();
+        this.valor = request.valorChave();
     }
 }
 

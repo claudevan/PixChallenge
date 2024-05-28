@@ -48,6 +48,9 @@ public class Correntista {
     @OneToMany(mappedBy = "correntista", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Conta> contas;
 
+    @org.springframework.data.annotation.Transient
+    private Integer quantidadeMaxima;
+
     public Correntista(CorrentistaCreateRequest request) {
         this.nome = request.nome();
         this.tipoConta = request.tipoConta();
@@ -61,7 +64,5 @@ public class Correntista {
         this.sobrenome = request.sobrenome();
         this.tipoPessoa = request.tipoPessoa();
         this.documento = request.documento();
-
-        //this.contas.add(new Conta(request, this));
     }
 }
